@@ -1,1 +1,103 @@
+name: ISO25010 Blackbox Testing Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  functional-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Install Chromium
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
+      - name: Run Functional Tests
+        env:
+          CHROME_BIN: /usr/bin/chromium-browser
+        run: python tests/functional/test_homepage.py
+
+  performance-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run k6 performance test (docker)
+        run: |
+          docker run --rm -v ${{ github.workspace }}:/work -w /work loadimpact/k6 run tests/performance/perf_test.js
+
+  reliability-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install -r requirements.txt
+      - name: Run Reliability Test
+        run: python tests/reliability/reliability_test.py
+
+  compatibility-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install -r requirements.txt
+      - name: Install Chromium
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
+      - name: Run Compatibility Test
+        env:
+          CHROME_BIN: /usr/bin/chromium-browser
+        run: python tests/compatibility/compatibility_test.py
+
+  usability-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install deps
+        run: pip install -r requirements.txt
+      - name: Install Chromium
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y chromium-browser
+      - name: Run Usability Test
+        env:
+          CHROME_BIN: /usr/bin/chromium-browser
+        run: python tests/usability/usability_test.py
+
+  security-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run OWASP ZAP Baseline Scan
+        run: |
+          docker pull owasp/zap2docker-stable
+          docker run -t --rm owasp/zap2docker-stable zap-baseline.py -t https://jpteunm.com -r zap_report.html
+      - name: Upload ZAP report
+        uses: actions/upload-artifact@v3
+        with:
+          name: zap-security-report
+          path: zap_report.html
 
