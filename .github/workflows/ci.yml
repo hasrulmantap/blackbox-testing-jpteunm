@@ -23,6 +23,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y chromium-browser
+          name: Install Chromedriver
+         run: sudo apt-get install -y chromium-chromedriver
       - name: Run Functional Tests
         env:
           CHROME_BIN: /usr/bin/chromium-browser
@@ -63,6 +65,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y chromium-browser
+          name: Install Chromedriver
+          run: sudo apt-get install -y chromium-chromedriver
       - name: Run Compatibility Test
         env:
           CHROME_BIN: /usr/bin/chromium-browser
@@ -81,7 +85,9 @@ jobs:
       - name: Install Chromium
         run: |
           sudo apt-get update
-          sudo apt-get install -y chromium-chromebrowser
+          sudo apt-get install -y chromium-browser
+          name: Install Chromedriver
+          run: sudo apt-get install -y chromium-chromedriver
       - name: Run Usability Test
         env:
           CHROME_BIN: /usr/bin/chromium-browser
