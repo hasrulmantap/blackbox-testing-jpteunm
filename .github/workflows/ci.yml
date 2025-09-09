@@ -99,8 +99,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run OWASP ZAP Baseline Scan
         run: |
-          docker pull owasp/zap2docker-stable
-          docker run -t --rm owasp/zap2docker-stable zap-baseline.py -t https://jpteunm.com -r zap_report.html
+          docker pull zaproxy/zap2docker-stable
+          docker run -t --rm zaproxy/zap2docker-stable zap-baseline.py -t https://jpteunm.com -r zap_report.html
       - name: Upload ZAP report
         uses: actions/upload-artifact@v4
         with:
