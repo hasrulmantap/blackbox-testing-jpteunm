@@ -8,9 +8,7 @@ options = Options()
 options.add_argument("--headless=new")
 options.add_argument("--no-sandbox")
 options.add_argument("--disable-dev-shm-usage")
-chrome_bin = os.environ.get("CHROME_BIN", r"C:\Program Files\Google\Chrome\Application\chrome.exe")
-if os.path.exists(chrome_bin):
-    options.binary_location = chrome_bin
+options.binary_location = '/usr/bin/chromium-browser'
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 driver.get("https://jpteunm.com")
