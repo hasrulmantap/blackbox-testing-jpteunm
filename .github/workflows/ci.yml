@@ -81,7 +81,7 @@ jobs:
       - name: Install Chromium
         run: |
           sudo apt-get update
-          sudo apt-get install -y chromium-browser
+          sudo apt-get install -y chromium-chromebrowser
       - name: Run Usability Test
         env:
           CHROME_BIN: /usr/bin/chromium-browser
