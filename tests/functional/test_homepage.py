@@ -1,4 +1,3 @@
-import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -6,14 +5,9 @@ from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
 chrome_options = Options()
-chrome_options.add_argument("--headless=new")
+chrome_options.add_argument("--headless")
 chrome_options.add_argument("--no-sandbox")
 chrome_options.add_argument("--disable-dev-shm-usage")
-chrome_bin = os.environ.get("CHROME_BIN", r"C:\Program Files\Google\Chrome\Application\chrome.exe")
-if os.path.exists(chrome_bin):
-    chrome_options.binary_location = chrome_bin
-    from selenium.webdriver.chrome.service import Service
-    from webdriver_manager.chrome import ChromeDriverManager
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 url = "https://jpteunm.com"
@@ -30,4 +24,3 @@ except AssertionError as e:
     raise SystemExit(1)
 finally:
     driver.quit()
-
